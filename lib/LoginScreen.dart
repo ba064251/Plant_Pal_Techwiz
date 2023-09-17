@@ -24,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool ischeck = true;
 
+  bool loader = false;
+
   final _email = TextEditingController();
   final _pass = TextEditingController();
 
@@ -39,17 +41,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loginuser()async{
     try{
+      setState(() {
+        loader = !loader;
+      });
       UserCredential userCredential =  await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email.text.toString(), password: _pass.text.toString());
         if(FirebaseAuth.instance.currentUser!.email=="admin@gmail.com"){
+          setState(() {
+            loader = !loader;
+          });
           Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminScreen(),));
         }
         else{
           SharedPreferences user = await SharedPreferences.getInstance();
           user.setString("email", _email.text.toString());
+          setState(() {
+            loader = !loader;
+          });
           Navigator.push(context, MaterialPageRoute(builder: (context) => MainHome(),));
         }
       } on FirebaseAuthException catch(ex){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${ex.code.toString()}")));
+      setState(() {
+        loader = !loader;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ex.code.toString())));
     }
   }
 
@@ -70,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
 
                 ClipRRect(
+                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(250)),
                   child: Container(
                     width: double.infinity,
                     height: 240,
@@ -80,7 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           image: AssetImage('images/register.jpg'))
                     ),
                   ),
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(250)),
                 ),
 
                 const SizedBox(
@@ -130,7 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(20),
                             color: MyColors.button_color
                         ),
-                        child: Center(child: text_custome(text: "Login", size: 14, fontWeight: FontWeight.w400,color: Colors.white),),
+                        child:  Center(child: loader==false?text_custome(text: "Login", size: 14, fontWeight: FontWeight.w400,color: Colors.white):const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: CircularProgressIndicator(color: Colors.white,),
+                        ),),
                       ),
                     ),
                   ],

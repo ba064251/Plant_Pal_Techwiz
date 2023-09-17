@@ -70,19 +70,19 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
           scrollDirection: Axis.vertical,
           physics: const ScrollPhysics(),
           child: Container(
-              margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: 10,
+                    const SizedBox(width: 10,
                     height: 20,),
                     text_custome(text: 'Accessories',color: MyColors.card_light_color1, size: 24, fontWeight: FontWeight.w600)
                   ],
                 ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     TextFormField(
                       decoration: InputDecoration(
 
@@ -100,8 +100,8 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                           )
                         ),
                         hintText: "Search Accessories",
-                        prefixIcon: Icon(Icons.search),
-                        suffixIcon:Icon(Icons.clear),
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon:const Icon(Icons.clear),
                       ),
                     ),
 
@@ -119,7 +119,7 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                        return GridView.builder(
                          shrinkWrap: true,
                          //  physics: NeverScrollableScrollPhysics(),
-                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                            crossAxisSpacing: 40,
                            mainAxisSpacing: 10,
                            crossAxisCount: 2,
@@ -128,13 +128,13 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                          itemCount: accessmap1,
                          itemBuilder: (_,index){
 
-                           var accessmap = snapshot.data!.docs[index];
-                           var access_id = snapshot.data!.docs[index].id;
+                           // var accessmap = snapshot.data!.docs[index];
+                           // var access_id = snapshot.data!.docs[index].id;
 
                            var name = snapshot.data!.docs[index]["Accessories-Name"];
                            var cat= snapshot.data!.docs[index]["Accessories-Category"];
                            var desc = snapshot.data!.docs[index]["Accessories-Description"];
-                           var qty = snapshot.data!.docs[index]["Accessories-Quantity"];
+                           //var qty = snapshot.data!.docs[index]["Accessories-Quantity"];
                            var price = snapshot.data!.docs[index]["Accessories-Price"];
                            String image = snapshot.data!.docs[index]["Accessories-Image"];
 
@@ -175,14 +175,14 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                                    ),
 
                                    Row(
+                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children:[
                                        Padding(
                                          padding: const EdgeInsets.only(left: 10),
-                                         child: text_custome(text: "\$${price}", size: 14, fontWeight: FontWeight.w600),
+                                         child: text_custome(text: "\$$price", size: 14, fontWeight: FontWeight.w600),
                                        ),
-                                       IconButton(onPressed: (){}, icon: Icon(Iconsax.heart,color: Colors.red,size:18))
+                                       IconButton(onPressed: (){}, icon: const Icon(Iconsax.heart,color: Colors.red,size:18))
                                      ],
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    ),
                                  ],
                                ),
@@ -193,11 +193,11 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                      }
 
                      if(snapshot.hasError){
-                       return Icon(Icons.error);
+                       return const Icon(Icons.error);
                      }
 
                      if(snapshot.connectionState == ConnectionState.waiting){
-                       return CircularProgressIndicator();
+                       return const CircularProgressIndicator();
                      }
 
                      return Container();

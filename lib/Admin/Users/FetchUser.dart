@@ -18,8 +18,10 @@ class UserFetch extends StatefulWidget {
 
 class _UserFetchState extends State<UserFetch> {
 
+  // Default Selected Value to display all data based on Gender -> All
   var gender = "All";
 
+  // SignOut Method For Admin
   void signout()async{
     await FirebaseAuth.instance.signOut();
     Navigator.push(context, MaterialPageRoute(builder:  (context) => const LoginScreen(),));
@@ -28,6 +30,9 @@ class _UserFetchState extends State<UserFetch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      // Floating Button redirect to Login Screen
+
         floatingActionButton: FloatingActionButton(
             onPressed: (){
               signout();
@@ -40,10 +45,13 @@ class _UserFetchState extends State<UserFetch> {
             child: Column(
               children: [
                 const SizedBox(height: 20,),
+
+                // Fetch User Heading
+
                 text_custome(text: "Fetching User", size: 16, fontWeight: FontWeight.w600),
                 const SizedBox(height: 20,),
 
-                
+                // Filtering Button Based on Gender
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   child: Row(
@@ -106,18 +114,20 @@ class _UserFetchState extends State<UserFetch> {
                 ),
                 
                 const SizedBox(height: 20,),
-                
+
+
+                // Getting User From Firebase Firestore based on Gender
                 StreamBuilder(
                   stream: gender=="Male"?FirebaseFirestore.instance.collection("Users").where('User-Gender',isEqualTo: 'Male').snapshots():
                   gender=="All"?FirebaseFirestore.instance.collection("Users").snapshots():FirebaseFirestore.instance.collection("Users").where('User-Gender',isEqualTo: 'Female').snapshots(),
                   builder: (context, snapshot) {
-                    var user_length = snapshot.data!.docs.length;
+                    var userLength = snapshot.data!.docs.length;
                     if(snapshot.hasData){
-                      return user_length!=0?ListView.builder(
+                      return userLength!=0?ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         physics: const ScrollPhysics(),
-                        itemCount: user_length,
+                        itemCount: userLength,
                         itemBuilder: (context, index) {
 
                           // Fetchin Data
@@ -166,17 +176,17 @@ class _UserFetchState extends State<UserFetch> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    // Plant Name
-                                    Container(
+                                    // Name
+                                    SizedBox(
                                       width: 120,
                                       height: 24,
                                       child: text_custome(text: "${usermap["User-Name"]}", size: 18, fontWeight: FontWeight.w600),
                                     ),
 
                                     const SizedBox(height: 3,),
-                                    // Category
+                                    // Email
 
-                                    Container(
+                                    SizedBox(
                                       width: 120,
                                       height: 20,
                                       child: text_custome(text: "${usermap["User-Email"]}", size: 14, fontWeight: FontWeight.w600),
@@ -184,9 +194,9 @@ class _UserFetchState extends State<UserFetch> {
 
 
                                     const SizedBox(height: 3,),
-                                    // Price
+                                    // Gender
 
-                                    Container(
+                                    SizedBox(
                                       width: 120,
                                       height: 24,
                                       child: text_custome(text: "${usermap["User-Gender"]}", size: 14, fontWeight: FontWeight.w600),
@@ -220,7 +230,7 @@ class _UserFetchState extends State<UserFetch> {
 
                                 const SizedBox(width: 6,),
 
-                                // Update Button
+                                // Delete Button
 
                                 GestureDetector(
                                   onTap: ()async{

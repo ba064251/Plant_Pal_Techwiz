@@ -18,10 +18,12 @@ class ContactScreen extends StatefulWidget {
 
 class _ContactScreenState extends State<ContactScreen> {
 
+  // TextEditing Controllers For TextFields
   final _sendername= TextEditingController();
   final _senderemail=TextEditingController();
   final _sendermessage=TextEditingController();
 
+  // Feedback Upload Method
   void addingfeedback({String? imgurl})async{
 
     Map<String,dynamic> addfeedback ={
@@ -29,10 +31,10 @@ class _ContactScreenState extends State<ContactScreen> {
       "User-Email":_senderemail.text.toString(),
       "User-Message": _sendermessage.text.toString(),
     };
-    print(addfeedback);
     await FirebaseFirestore.instance.collection("FeedBack").add(addfeedback);
   }
 
+  // Clearing Cache
   @override
   void dispose() {
     // TODO: implement dispose

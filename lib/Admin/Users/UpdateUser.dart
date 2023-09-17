@@ -23,6 +23,7 @@ class UserUpdate extends StatefulWidget {
   String gender;
   String? image;
 
+  // Getting User Data
 
   UserUpdate(
       {required this.id, required this.email, required this.name, required this.pass, required this.age, required this.gender,this.image});
@@ -36,20 +37,32 @@ class _UserUpdateState extends State<UserUpdate> {
   var id;
 
 
+  // Getting User ID to Update data
   _UserUpdateState({required this.id});
 
+  // Password obsecure check
   bool ischeck = true;
 
+  //TextEditing Controllers for TextForm Fields
   final _email = TextEditingController();
   final _name = TextEditingController();
   final _pass = TextEditingController();
   final _age = TextEditingController();
   final _gender = TextEditingController();
+
+  //File For Image
   File? Profilepic;
+
+  // Getting image DownloadUrl From Firebase Storage
   String DownloadUrl = '';
+
+  // Default Selected DropDown Value
   String? selectedGender;
+
+  // Form Validation Key
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
+  // Displaying Text in Fields on Scaffold Launch
   @override
   void initState() {
     // TODO: implement initState
@@ -62,6 +75,7 @@ class _UserUpdateState extends State<UserUpdate> {
     super.initState();
   }
 
+  // Clearing Cache
   @override
   void dispose() {
     // TODO: implement dispose
@@ -73,6 +87,7 @@ class _UserUpdateState extends State<UserUpdate> {
     super.dispose();
   }
 
+  // Method to update user date
   Future imageupload()async{
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("User-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
@@ -83,7 +98,7 @@ class _UserUpdateState extends State<UserUpdate> {
     }
   }
 
-
+// Method of User Update Data Details
   void updateuser({String? imgurl})async{
     await FirebaseFirestore.instance.collection("Users").doc(id).update({
       "User-Name":_name.text.toString(),
@@ -94,7 +109,6 @@ class _UserUpdateState extends State<UserUpdate> {
       "User-Image":imgurl,
     });
 
-    print(updateuser);
     Navigator.pop(context);
   }
 
@@ -122,6 +136,7 @@ class _UserUpdateState extends State<UserUpdate> {
               children: [
                 const SizedBox(height: 20,),
 
+                // Image Picking and Displaying
                 GestureDetector(
                     onTap: ()async{
                       XFile? selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -156,8 +171,7 @@ class _UserUpdateState extends State<UserUpdate> {
 
                 const SizedBox(height: 20,),
 
-                // Text Fields
-
+                // TextFormFields of  Name -> Age -> Gender -> Email -> Password -> Update Button
 
                 Form(
                     key: _key,
@@ -208,7 +222,7 @@ class _UserUpdateState extends State<UserUpdate> {
                         ),
                       ),
                     ),
-                    // custom_field(label: "Enter Your Gender", controller: _gender, prefixicon: Icon(Icons.male), surfixneed: true),
+                    //custom_field(label: "Enter Your Gender", controller: _gender, prefixicon: const Icon(Icons.male), surfixneed: true),
                     const SizedBox(height: 10,),
                     custom_field(label: "Enter Your Email",controller: _email,keyboard: TextInputType.emailAddress ,Errormsg: "Email is Required", prefixicon: const Icon(Iconsax.message_notif), surfixneed: false),
                     const SizedBox(height: 10,),

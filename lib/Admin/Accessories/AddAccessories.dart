@@ -20,15 +20,24 @@ class AccessAdd extends StatefulWidget {
 class _AccessAddState extends State<AccessAdd> {
 
 
+  // Text Editing Controllers For TextFields
   final _name = TextEditingController();
   final _cat = TextEditingController();
   final _desc = TextEditingController();
   final _qty = TextEditingController();
   final _price = TextEditingController();
+
+  // File For Image
   File? Profilepic;
+
+  // DownloadUrl For Getting Firebase Storage Download URL
   String DownloadUrl = '';
+
+  // DropDown Selected Category
   String selectedCategory = 'Grow Lights';
 
+
+  // Image Upload Method for Accessories
   Future imageupload()async{
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("Accessories-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
@@ -36,6 +45,7 @@ class _AccessAddState extends State<AccessAdd> {
     _addaccess(imgurl: DownloadUrl);
   }
 
+  // Accessories Details Upload to Firebase Firestore
   void _addaccess({String? imgurl})async{
     Map<String, dynamic> plantadd = {
       "Accessories-Name":_name.text.toString(),
@@ -54,6 +64,7 @@ class _AccessAddState extends State<AccessAdd> {
     });
   }
 
+  // Clearing Cache
   @override
   void dispose() {
     // TODO: implement dispose
@@ -72,12 +83,16 @@ class _AccessAddState extends State<AccessAdd> {
         top: true,
         child: SingleChildScrollView(
           physics: const ScrollPhysics(),
+
+          // Form Having Image -> Name -> Description -> Quantity -> Price -> Add Button
+
           child: Form(
               child: Column(
             children: [
 
               const SizedBox(height: 40,),
 
+              // Image Picking and Displaying
               GestureDetector(
                   onTap: ()async{
                     XFile? selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);

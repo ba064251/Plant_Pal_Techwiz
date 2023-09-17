@@ -20,6 +20,9 @@ class _AccessFetchState extends State<AccessFetch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      // Floating Button To Redirect to Add Page
+
       floatingActionButton: FloatingActionButton(
           onPressed: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) => const AccessAdd(),));
@@ -144,7 +147,7 @@ class _AccessFetchState extends State<AccessFetch> {
 
                               const SizedBox(width: 6,),
 
-                              // Update Button
+                              // Delete Button
 
                               GestureDetector(
                                 onTap: ()async{

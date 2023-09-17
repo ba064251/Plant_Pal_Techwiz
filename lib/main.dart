@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testing/AddtoCart.dart';
 import 'package:testing/Admin/Plant/AddPlant.dart';
 import 'package:testing/Admin/Plant/FetchPlant.dart';
 import 'package:testing/HomeScreen.dart';
@@ -57,7 +58,9 @@ class _SplashScreenState extends State<SplashScreen>{
   @override
   void initState(){
     // TODO: implement initState
+    // Checking One Time
     skipping_pageview();
+    // Splash Timer
     Timer(
         const Duration(seconds: 5),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(

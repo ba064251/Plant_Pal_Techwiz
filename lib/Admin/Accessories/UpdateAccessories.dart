@@ -23,6 +23,7 @@ class AccessUpdate extends StatefulWidget {
   String? image;
 
 
+  // Getting Required Fields to be Filled on Scaffold Launch
   AccessUpdate(
       {required this.id,
       required this.name,
@@ -41,17 +42,26 @@ class _AccessUpdateState extends State<AccessUpdate> {
   var id;
 
 
+  // Getting To be Update Data
   _AccessUpdateState({required this.id });
 
+  // TextEditing Controllers for Textfields
   final _name = TextEditingController();
   final _cat = TextEditingController();
   final _desc = TextEditingController();
   final _qty = TextEditingController();
   final _price = TextEditingController();
+
+  // File For Image
   File? Profilepic;
+
+  // DownloadUrl For Getting Firebase Storage Download URL
   String DownloadUrl = '';
+
+  // DropDown Selected Category
   String? selectedCategory;
 
+  // Image Upload Method for Accessories
   Future imageupload()async{
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("Accessories-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
@@ -59,6 +69,7 @@ class _AccessUpdateState extends State<AccessUpdate> {
     _updateaccess(imgurl: DownloadUrl);
   }
 
+  // Accessories Updated Data Upload to Firebase Firestore
   void _updateaccess({String? imgurl})async{
 
     await FirebaseFirestore.instance.collection("Accessories").doc(id).update({
@@ -70,13 +81,13 @@ class _AccessUpdateState extends State<AccessUpdate> {
       "Accessories-Image":imgurl,
     });
 
-    print(_updateaccess);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Data Updated")));
     setState(() {
       Navigator.pop(context);
     });
   }
 
+  // Displaying Text in Fields on Scaffold Launch
   @override
   void initState() {
     // TODO: implement initState
@@ -89,6 +100,7 @@ class _AccessUpdateState extends State<AccessUpdate> {
     super.initState();
   }
 
+  // Clearing Cache
   @override
   void dispose() {
     // TODO: implement dispose
@@ -108,12 +120,16 @@ class _AccessUpdateState extends State<AccessUpdate> {
         top: true,
         child: SingleChildScrollView(
           physics: const ScrollPhysics(),
+
+          // Form Having Image -> Name -> Description -> Quantity -> Price -> Update Button
+
           child: Form(
               child: Column(
                 children: [
 
                   const SizedBox(height: 40,),
 
+                  // Image Picking and Displaying
                   GestureDetector(
                       onTap: ()async{
                         XFile? selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);

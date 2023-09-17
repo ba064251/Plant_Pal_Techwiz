@@ -33,10 +33,10 @@ class menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
+      child: SizedBox(
         child: ListTile(
           leading: const Icon(Iconsax.menu_1,size: 18,),
-          title: Text("$title",style: GoogleFonts.poppins(
+          title: Text(title,style: GoogleFonts.poppins(
               color: MyColors.button_color
           ),),
         ),

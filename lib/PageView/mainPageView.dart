@@ -54,10 +54,10 @@ class _PageViewBodyState extends State<PageViewBody> {
                 lastPage = (index == 2);
               });
             },
-            children: [
-              const pageView1(),
-              const pageView2(),
-              const pageView3(),
+            children: const [
+              pageView1(),
+              pageView2(),
+              pageView3(),
             ],
           ),
           Container(

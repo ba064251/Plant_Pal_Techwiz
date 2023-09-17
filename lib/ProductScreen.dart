@@ -210,6 +210,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
 
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children:[
                                         text_custome(text: '${plantmap["Plant-Price"]}', size: 14, fontWeight: FontWeight.w600),
                                         IconButton(onPressed: (){
@@ -218,7 +219,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                           });
                                         }, icon: Icon(fav_product?FontAwesomeIcons.gratipay:FontAwesomeIcons.heart,color: Colors.red,size:18))
                                       ],
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     ),
                                   ],
                                 ),

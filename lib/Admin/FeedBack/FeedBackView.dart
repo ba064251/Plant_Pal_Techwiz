@@ -28,8 +28,14 @@ class _ViewFeedBackState extends State<ViewFeedBack> {
           child: Column(
             children: [
               const SizedBox(height: 20,),
+
+              // Feedback Heading
+
               text_custome(text: "Fetching FeedBacks", size: 16, fontWeight: FontWeight.w600),
               const SizedBox(height: 20,),
+
+
+              // Getting Feedbacks
 
               StreamBuilder(
                 stream: FirebaseFirestore.instance.collection("FeedBack").snapshots(),

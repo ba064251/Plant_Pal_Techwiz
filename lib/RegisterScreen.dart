@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testing/LoginScreen.dart';
-import 'package:testing/Reegistration/Register_Login.dart';
 import 'package:testing/reusable_widget/colors.dart';
 import 'package:testing/reusable_widget/reusable_textformfield.dart';
 import 'package:testing/reusable_widget/text_widget.dart';
@@ -32,15 +32,36 @@ class _REgisterScreenState extends State<REgisterScreen> {
   File? Profilepic;
   String DownloadUrl = '';
   String selectedGender = 'Male';
+
+  bool loader = false;
+
+  final serviceId = 'service_w3jn09a';
+  final templateId = 'template_gqcym6k';
+  final userId = '16HPUTlRcbd96_yj1';
+  final userSubject = 'PlantPal Registration';
+  final userMessage = "We're absolutely thrilled to welcome you to the PlantPal family! \n"
+      "Your decision to join us not only shows your love for plants but also your commitment to nurturing them, just like a true nature enthusiast\n"
+      "Thank you for choosing PlantPal. Let's embark on this green adventure together and create a world filled with healthier, happier plants!\n"
+      "Happy planting!";
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
 
   Future imageupload()async{
+
+    setState(() {
+      loader = !loader;
+    });
+
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("User-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
     DownloadUrl = await taskSnapshot.ref.getDownloadURL();
-    addinguser(imgurl: DownloadUrl);
     registerUser();
+    addinguser(imgurl: DownloadUrl);
+    emailSender();
+    setState(() {
+      loader = !loader;
+    });
   }
 
   // Adding User
@@ -54,8 +75,32 @@ class _REgisterScreenState extends State<REgisterScreen> {
       "User-Password":pass.text.toString(),
       "User-Image": imgurl,
     };
-    print(adduser);
+
     await FirebaseFirestore.instance.collection("Users").add(adduser);
+    }
+
+  Future emailSender()async{
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin':'http://localhost',
+        'Content-Type':'application/json',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params':{
+          'userName': name.text,
+          'userEmail': 'plantpal@gmail.com',
+          'toEmail': email.text,
+          'userSubject': userSubject,
+          'userMessage': userMessage,
+        },
+      }),
+    );
+    print(response);
   }
 
   //Registration User
@@ -67,7 +112,7 @@ class _REgisterScreenState extends State<REgisterScreen> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen(),));
 
     }on FirebaseAuthException catch(ex){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${ex.code.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ex.code.toString())));
     }
   }
   //
@@ -223,7 +268,10 @@ class _REgisterScreenState extends State<REgisterScreen> {
                             borderRadius: BorderRadius.circular(20),
                             color: MyColors.button_color
                         ),
-                        child: Center(child: text_custome(text: "Register", size: 14, fontWeight: FontWeight.w400,color: Colors.white),),
+                        child: Center(child: loader==false?text_custome(text: "Register", size: 14, fontWeight: FontWeight.w400,color: Colors.white):const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: CircularProgressIndicator(color: Colors.white,),
+                        ),),
                       ),
                     ),
                   ],

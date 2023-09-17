@@ -19,6 +19,7 @@ class PlantAdd extends StatefulWidget {
 
 class _PlantAddState extends State<PlantAdd> {
 
+  // TextEditing Controllers for Fields
 
   final _name = TextEditingController();
   final _cat = TextEditingController();
@@ -26,10 +27,18 @@ class _PlantAddState extends State<PlantAdd> {
   final _qty = TextEditingController();
   final _price = TextEditingController();
   final _growth = TextEditingController();
+
+  // File For Image
   File? Profilepic;
+
+  // Gettings DownloadUrl From Firebase Storage
   String DownloadUrl = '';
+
+  // DropDown Default Selected Value
   String selectedValue = 'Flower';
 
+
+  // Date Upload with Image in Plant Collection using Firebase Firestore
   Future imageupload()async{
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("Plant-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
@@ -37,6 +46,7 @@ class _PlantAddState extends State<PlantAdd> {
     _addplant(imgurl: DownloadUrl);
   }
 
+  // Plant Detail Method
   void _addplant({String? imgurl})async{
     Map<String, dynamic> plantadd = {
       "Plant-Name":_name.text.toString(),
@@ -47,7 +57,6 @@ class _PlantAddState extends State<PlantAdd> {
       "Plant-Growth":_growth.text.toString(),
       "Plant-Image": imgurl,
     };
-    print(_addplant);
     await FirebaseFirestore.instance.collection("Plants").add(plantadd);
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Data Inserted")));
@@ -56,6 +65,7 @@ class _PlantAddState extends State<PlantAdd> {
     });
   }
 
+  // Clearing Cache
   @override
   void dispose() {
     // TODO: implement dispose
@@ -75,11 +85,16 @@ class _PlantAddState extends State<PlantAdd> {
         top: true,
         child: SingleChildScrollView(
           physics: const ScrollPhysics(),
+
+          // TextFormFields of Image -> Name -> Category -> Description -> Quantity -> Price -> Growth Habit -> Add Button
+
           child: Form(
               child: Column(
             children: [
 
               const SizedBox(height: 40,),
+
+              // Image Picking and Displaying
 
               GestureDetector(
                   onTap: ()async{

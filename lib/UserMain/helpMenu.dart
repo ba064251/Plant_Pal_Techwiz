@@ -108,7 +108,7 @@ question({required this.question1, required this.answer});
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      child: ExpansionTile(title: Text('$question1',style: GoogleFonts.poppins(
+      child: ExpansionTile(title: Text(question1,style: GoogleFonts.poppins(
         fontSize: 16,
 
       ),),
@@ -119,7 +119,7 @@ question({required this.question1, required this.answer});
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 10),
-          child: Text('$answer',style: GoogleFonts.poppins(
+          child: Text(answer,style: GoogleFonts.poppins(
             fontSize: 14,
             color: Colors.white
           ),

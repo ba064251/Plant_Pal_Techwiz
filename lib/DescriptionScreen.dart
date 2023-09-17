@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testing/reusable_widget/colors.dart';
 import 'package:testing/reusable_widget/text_widget.dart';
 
@@ -64,6 +65,58 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
 
   var _category;
 
+  String userId = ' ';
+
+  _getUser() async {
+    SharedPreferences user = await SharedPreferences.getInstance();
+    var id = user.getString('email');
+    return id;
+  }
+
+  @override
+  void initState() {
+    _getUser().then((id) {
+      //calling setState will refresh your build method.
+      setState(() {
+        userId = id;
+      });
+    });
+    super.initState();
+  }
+
+  void wishingItem()async{
+    Map<String, dynamic> wishAdd = {
+      "Plant-Name":plant_name,
+      "Plant-Category":plant_category,
+      "Plant-Description":plant_description,
+      "Plant-Price":price,
+      "Plant-Growth":plant_growth,
+      "Plant-Image": plant_img,
+      "User-Email": userId,
+    };
+    await FirebaseFirestore.instance.collection("Wishlist").add(wishAdd);
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item Added to Wishlist")));
+
+  }
+
+  void cartItem()async{
+    Map<String, dynamic> cartAdd = {
+      "Plant-Name":plant_name,
+      "Plant-Category":plant_category,
+      "Plant-Description":plant_description,
+      "Plant-Price":price,
+      "Plant-Growth":plant_growth,
+      "Plant-Image": plant_img,
+      "User-Email": userId,
+    };
+    await FirebaseFirestore.instance.collection("Cart").add(cartAdd);
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item Added to Cart")));
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +136,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                             bottomRight: Radius.circular(40)),
                         color: MyColors.background_color.withOpacity(0.4),
                         image: DecorationImage(
-                            image: NetworkImage('${plant_img}'),
+                            image: NetworkImage(plant_img),
                             fit: BoxFit.cover),
                       ),
                     ),
@@ -108,7 +161,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                         setState(() {
                           fav_product=!fav_product;
                         });
-                        print(fav_product);
+                        wishingItem();
                       },
                         child: Icon(
                          fav_product?  FontAwesomeIcons.gratipay:FontAwesomeIcons.heart,
@@ -131,12 +184,12 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             text_custome(
-                                text: '${plant_name}',
+                                text: plant_name,
                                 size: 24.0,
                                 fontWeight: FontWeight.w600),
                             text_custome(
 
-                                text: '${plant_category}',
+                                text: plant_category,
                                 size: 16.0,
                                 fontWeight: FontWeight.w400),
                             const SizedBox(
@@ -145,7 +198,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                             text_custome(text: 'Plant Description', size: 16.0, fontWeight: FontWeight.w600),
                             const SizedBox(height: 5,),
                             text_custome(
-                                text:'${plant_description}',
+                                text:plant_description,
                                     size: 14,
                                 color: Colors.grey,
                                 fontWeight: FontWeight.w400)
@@ -154,7 +207,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                         const SizedBox(
                           height: 15,
                         ),
-                        text_custome(text: 'Price : \$${price}', size: 18, fontWeight: FontWeight.w600),
+                        text_custome(text: 'Price : \$$price', size: 18, fontWeight: FontWeight.w600),
                         const SizedBox(
                           height: 15,
                         ),
@@ -183,7 +236,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 12, right: 12, top: 2, bottom: 2),
-                                    child: Text('${count}'),
+                                    child: Text('$count'),
                                   ),
                                   IconButton(
                                       onPressed: () {
@@ -198,7 +251,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                         ),
                         const SizedBox(height: 20,),
                         plant_growth!=null?text_custome(text: 'Plant Growth: ', size: 16, fontWeight: FontWeight.w600):Container(),
-                        plant_growth!=null?text_custome(text:'${plant_growth}' , size: 14, fontWeight: FontWeight.w400):Container(),
+                        plant_growth!=null?text_custome(text:plant_growth , size: 14, fontWeight: FontWeight.w400):Container(),
                         const SizedBox(height: 30,),
                         Row(
                           children: [
@@ -215,7 +268,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
 
                                   if(count>0)
                                     {
-                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item Added")));
+                                      cartItem();
                                     }
                                   else
                                     {

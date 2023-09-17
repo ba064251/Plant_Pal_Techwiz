@@ -18,6 +18,9 @@ class _PLantFetchState extends State<PLantFetch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      // Floating Button Redirect to Add Plant Page
+
       floatingActionButton: FloatingActionButton(
           onPressed: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) => const PlantAdd(),));
@@ -30,8 +33,13 @@ class _PLantFetchState extends State<PLantFetch> {
           child: Column(
             children: [
               const SizedBox(height: 20,),
+
+              // Plant Heading
+
               text_custome(text: "Fetching Plants", size: 16, fontWeight: FontWeight.w600),
               const SizedBox(height: 20,),
+
+              // Getting Plants from Plant Collection form Firebase Firestore
 
               StreamBuilder(
                 stream: FirebaseFirestore.instance.collection("Plants").snapshots(),
@@ -143,7 +151,7 @@ class _PLantFetchState extends State<PLantFetch> {
 
                               const SizedBox(width: 6,),
 
-                              // Update Button
+                              // Delete Button
 
                               GestureDetector(
                                 onTap: ()async{

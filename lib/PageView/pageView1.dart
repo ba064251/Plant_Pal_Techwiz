@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:testing/PageView/pageViewWidget.dart';
 class pageView1 extends StatefulWidget {
   const pageView1({super.key});
@@ -12,7 +10,7 @@ class pageView1 extends StatefulWidget {
 class _pageView1State extends State<pageView1> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
           top: true,
           child: pageView1Body()),

@@ -5,13 +5,9 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:testing/Admin/Accessories/FetchAccessories.dart';
 import 'package:testing/Admin/FeedBack/FeedBackView.dart';
-import 'package:testing/Admin/Plant/AddPlant.dart';
 import 'package:testing/Admin/Plant/FetchPlant.dart';
-import 'package:testing/Admin/SiteMap/SiteMapDetail.dart';
-import 'package:testing/Admin/Users/AddUser.dart';
 import 'package:testing/Admin/Users/FetchUser.dart';
 import 'package:testing/reusable_widget/colors.dart';
-import 'package:testing/reusable_widget/text_widget.dart';
 
 import '../LoginScreen.dart';
 
@@ -24,11 +20,11 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
 
-  int selected_page = 0;
+  int selectedPage = 0;
 
   void _pageshifter(int index){
     setState(() {
-      selected_page = index;
+      selectedPage = index;
     });
   }
 
@@ -55,7 +51,7 @@ class _AdminScreenState extends State<AdminScreen> {
     },
 
       child: Scaffold(
-        body: page[selected_page],
+        body: page[selectedPage],
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
           child: GNav(
@@ -63,20 +59,20 @@ class _AdminScreenState extends State<AdminScreen> {
             activeColor: MyColors.heading_color,
             gap: 6,
             curve: Curves.easeInExpo,
-            selectedIndex: selected_page,
+            selectedIndex: selectedPage,
             onTabChange: _pageshifter,
             padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 14),
-            tabs: [
-              const GButton(
+            tabs: const [
+              GButton(
                   text: "Users",
                   icon: Iconsax.user_search),
-              const GButton(
+              GButton(
                   text: "Plants",
                   icon: Icons.energy_savings_leaf),
-              const GButton(
+              GButton(
                   text: "Accessories",
                   icon: Iconsax.share),
-              const GButton(
+              GButton(
                   text: "Feedback",
                   icon: Iconsax.receipt_item),
             ],

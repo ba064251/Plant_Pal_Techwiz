@@ -23,6 +23,7 @@ class PlantUpdate extends StatefulWidget {
   String growth;
   String image;
 
+  // Getting Required Data to Update
 
   PlantUpdate(
       {required this.id,
@@ -42,19 +43,28 @@ class _PlantUpdateState extends State<PlantUpdate> {
 
   var id;
 
-
+// Getting Plant ID to Update
   _PlantUpdateState({required this.id });
 
+
+  //TextEditing Controllers For TextForm Fields
   final _name = TextEditingController();
   final _cat = TextEditingController();
   final _desc = TextEditingController();
   final _qty = TextEditingController();
   final _price = TextEditingController();
   final _growth = TextEditingController();
+
+  // File For Image
   File? Profilepic;
+
+  // Getting Image Download Url From Firebase Storage
   String DownloadUrl = '';
+
+  // Default Selected Value of Plant Category
   String? selectedValue;
 
+  // Image and Data Upload Method
   Future imageupload()async{
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("Plant-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
@@ -62,6 +72,7 @@ class _PlantUpdateState extends State<PlantUpdate> {
     _updateplant(imgurl: DownloadUrl);
   }
 
+  // Plant Details Upload Method
   void _updateplant({String? imgurl})async{
 
     await FirebaseFirestore.instance.collection("Plants").doc(id).update({
@@ -74,13 +85,13 @@ class _PlantUpdateState extends State<PlantUpdate> {
       "Plant-Image":imgurl,
     });
 
-    print(_updateplant);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Data Updated")));
     setState(() {
       Navigator.pop(context);
     });
   }
 
+  // Displaying Text in Fields on Scaffold Launch
   @override
   void initState() {
     // TODO: implement initState
@@ -94,6 +105,7 @@ class _PlantUpdateState extends State<PlantUpdate> {
     super.initState();
   }
 
+  // Clearing Cache
   @override
   void dispose() {
     // TODO: implement dispose
@@ -114,12 +126,16 @@ class _PlantUpdateState extends State<PlantUpdate> {
         top: true,
         child: SingleChildScrollView(
           physics: const ScrollPhysics(),
+
+          // TextFormFields of Image -> Name -> Category -> Description -> Quantity -> Price -> Growth Habit -> Update Button
+
           child: Form(
               child: Column(
                 children: [
 
                   const SizedBox(height: 40,),
 
+                  // Image picking and Displaying
                   GestureDetector(
                       onTap: ()async{
                         XFile? selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
