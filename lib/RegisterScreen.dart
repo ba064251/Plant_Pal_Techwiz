@@ -69,8 +69,8 @@ class _REgisterScreenState extends State<REgisterScreen> {
 
     Map<String,dynamic> adduser ={
       "User-Name":name.text.toString(),
-      "User-Gender":gender.text.toString(),
-      "User-Age":selectedGender,
+      "User-Gender":selectedGender,
+      "User-Age":age.text.toString(),
       "User-Email":email.text.toString(),
       "User-Password":pass.text.toString(),
       "User-Image": imgurl,
