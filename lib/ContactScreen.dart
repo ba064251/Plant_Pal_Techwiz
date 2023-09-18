@@ -23,15 +23,22 @@ class _ContactScreenState extends State<ContactScreen> {
   final _senderemail=TextEditingController();
   final _sendermessage=TextEditingController();
 
+  bool loader = false;
+
   // Feedback Upload Method
   void addingfeedback({String? imgurl})async{
-
+    setState(() {
+      loader = !loader;
+    });
     Map<String,dynamic> addfeedback ={
       "User-Name":_sendername.text.toString(),
       "User-Email":_senderemail.text.toString(),
       "User-Message": _sendermessage.text.toString(),
     };
     await FirebaseFirestore.instance.collection("FeedBack").add(addfeedback);
+    setState(() {
+      loader = !loader;
+    });
   }
 
   // Clearing Cache
@@ -147,13 +154,5 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 }
-
-// Container(
-// width: double.infinity,
-// child: Chewie(
-// controller: chewieController!,
-// ),
-// )
-
 
 

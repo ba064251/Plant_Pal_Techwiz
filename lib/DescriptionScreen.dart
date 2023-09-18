@@ -53,6 +53,8 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
   var fav_product=false;
   int count = 1;
 
+  bool loader = false;
+
   void increment() {
     count++;
     setState(() {});
@@ -101,6 +103,9 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
   }
 
   void cartItem()async{
+    setState(() {
+      loader = !loader;
+    });
     Map<String, dynamic> cartAdd = {
       "Plant-Name":plant_name,
       "Plant-Category":plant_category,
@@ -112,6 +117,10 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
     };
     await FirebaseFirestore.instance.collection("Cart").add(cartAdd);
 
+    setState(() {
+      loader = !loader;
+    });
+    Future.delayed(const Duration(milliseconds: 1000));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item Added to Cart")));
 
   }
@@ -276,7 +285,10 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
                                     }
                                   }, child: Padding(
                                     padding: const EdgeInsets.only(left: 15,right: 15,bottom: 8,top: 8),
-                                    child: text_custome(text:'Add to Cart',size: 14,fontWeight: FontWeight.w400),
+                                child:  Center(child: loader==false?text_custome(text: "Add to Cart", size: 14, fontWeight: FontWeight.w400,color: Colors.white):const Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: CircularProgressIndicator(color: Colors.white,),
+                                ),),
                                   ),
                               ),
                             ),

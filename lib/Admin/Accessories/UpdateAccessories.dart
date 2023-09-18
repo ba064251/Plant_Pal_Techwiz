@@ -61,12 +61,20 @@ class _AccessUpdateState extends State<AccessUpdate> {
   // DropDown Selected Category
   String? selectedCategory;
 
+  bool loader = false;
+
   // Image Upload Method for Accessories
   Future imageupload()async{
+    setState(() {
+      loader = !loader;
+    });
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("Accessories-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
     DownloadUrl = await taskSnapshot.ref.getDownloadURL();
     _updateaccess(imgurl: DownloadUrl);
+    setState(() {
+      loader = !loader;
+    });
   }
 
   // Accessories Updated Data Upload to Firebase Firestore
@@ -233,7 +241,10 @@ class _AccessUpdateState extends State<AccessUpdate> {
                           borderRadius: BorderRadius.circular(20),
                           color: MyColors.button_color
                       ),
-                      child: Center(child: text_custome(text: "Update Access",fontWeight: FontWeight.w600,size: 14,color: Colors.white),),
+                      child: Center(child: loader==false?text_custome(text: "Update Access", size: 14, fontWeight: FontWeight.w400,color: Colors.white):const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: CircularProgressIndicator(color: Colors.white,),
+                      ),),
                     ),
                   )
                 ],

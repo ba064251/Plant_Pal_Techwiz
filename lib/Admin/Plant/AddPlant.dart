@@ -37,13 +37,21 @@ class _PlantAddState extends State<PlantAdd> {
   // DropDown Default Selected Value
   String selectedValue = 'Flower';
 
+  bool loader = false;
+
 
   // Date Upload with Image in Plant Collection using Firebase Firestore
   Future imageupload()async{
+    setState(() {
+      loader = !loader;
+    });
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("Plant-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
     DownloadUrl = await taskSnapshot.ref.getDownloadURL();
     _addplant(imgurl: DownloadUrl);
+    setState(() {
+      loader = !loader;
+    });
   }
 
   // Plant Detail Method
@@ -193,7 +201,10 @@ class _PlantAddState extends State<PlantAdd> {
                     borderRadius: BorderRadius.circular(20),
                     color: MyColors.button_color
                   ),
-                  child: Center(child: text_custome(text: "Add Plant",fontWeight: FontWeight.w600,size: 14,color: Colors.white),),
+                  child: Center(child: loader==false?text_custome(text: "Add Plant", size: 14, fontWeight: FontWeight.w400,color: Colors.white):const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: CircularProgressIndicator(color: Colors.white,),
+                  ),),
                 ),
               )
             ],

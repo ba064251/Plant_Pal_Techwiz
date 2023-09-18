@@ -43,6 +43,8 @@ class _UserUpdateState extends State<UserUpdate> {
   // Password obsecure check
   bool ischeck = true;
 
+  bool loader = false;
+
   //TextEditing Controllers for TextForm Fields
   final _email = TextEditingController();
   final _name = TextEditingController();
@@ -89,13 +91,22 @@ class _UserUpdateState extends State<UserUpdate> {
 
   // Method to update user date
   Future imageupload()async{
+    setState(() {
+      loader = !loader;
+    });
     UploadTask uploadTask = FirebaseStorage.instance.ref().child("User-Images").child(const Uuid().v1()).putFile(Profilepic!);
     TaskSnapshot taskSnapshot = await uploadTask;
     DownloadUrl = await taskSnapshot.ref.getDownloadURL();
     updateuser(imgurl: DownloadUrl);
     if(widget.email!=_email && widget.pass!=_pass){
       registerUser();
+      setState(() {
+        loader = !loader;
+      });
     }
+    setState(() {
+      loader = !loader;
+    });
   }
 
 // Method of User Update Data Details
@@ -244,7 +255,10 @@ class _UserUpdateState extends State<UserUpdate> {
                             borderRadius: BorderRadius.circular(20),
                             color: MyColors.button_color
                         ),
-                        child: Center(child: text_custome(text: "Update User", size: 14, fontWeight: FontWeight.w400,color: Colors.white),),
+                        child: Center(child: loader==false?text_custome(text: "Update User", size: 14, fontWeight: FontWeight.w400,color: Colors.white):const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: CircularProgressIndicator(color: Colors.white,),
+                        ),),
                       ),
                     ),
                   ],
